@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            display:flex;
+            align-items: center;
+            justify-content:center;
+            font-size: 18px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .label{
+            line-height: 20px;
+            padding:3px;
+            display: inline-block;
+            width: 200px;
+
+        }
+        .value{
+            min-width: 100px;
+            height:30px;
+            display: inline-block;
+            border-radius: 500px;
+            background-color:rgb(214, 211, 21);
+            text-align:center;
+            line-height: 30px;
+        }
+        .row{
+            margin:20px 0;
+        }
+        #tval{
+            background-color:rgb(148, 216, 70);
+
+        }
+        .bar{
+            display:block;
+            width:100%;
+            height:25px;
+            line-height: 25px;
+            background-color:rgb(43, 207, 212);
+            margin: 3px 0;
+
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div class="row">
+            <h3>Poll Results</h3>
+        </div>
+        <div class="row">
+            <span class="label">Total Votes:</span> <span class="value" id="tval"></span>
+        </div>
+        <div  class="row">
+            <span id="op1l" class="label"></span> <span class="value" id="op1v"></span><br>
+            <div class="bar" id="bar1">
+                <div id="p1"></div>
+            </div>
+        </div>
+        <div  class="row">
+            <span id="op2l" class="label"></span> <span class="value" id="op2v"></span><br>
+            <div class="bar" id="bar2">
+                <div id="p2"></div>
+            </div>
+        </div>
+        <div  class="row">
+            <span id="op3l" class="label"></span> <span class="value" id="op3v"></span><br>
+            <div class="bar" id="bar3">
+                <div id="p3"></div>
+            </div>
+        </div>
+        <div  class="row">
+            <span id="op4l" class="label"></span> <span class="value" id="op4v"></span><br>
+            <div class="bar" id="bar4">
+                <div id="p4"></div>
+            </div>
+        </div>
+        
+
+    </div>
+    <script type="text/javascript">
+    fetch("./fetch.php").then(response=>{
+        response.json().then(data=>{
+            let total = data.total;
+      document.getElementById("tval").innerHTML = total;
+
+         for(let i = 1 ; i<= data.options.length; i++){
+             document.getElementById("op"+i+"l").innerHTML= data.options[i-1].name;
+             document.getElementById("op"+i+"v").innerHTML= data.options[i-1].counter;
+              let per= Math.round(100 * (data.options[i - 1].counter / total));
+              document.getElementById("p" + i).innerHTML=  per + "%";
+              document.getElementById("bar"+i).style.width =  per + "%";
+              document.getElementById("p"+i).style.marginLeft =  per/2 + "%";
+         }
+        });
+    });
+    </script>
+</body>
+</html>
